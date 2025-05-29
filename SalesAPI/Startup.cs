@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using SalesAPI.Data;
 
 namespace SalesAPI
 {
@@ -33,6 +35,9 @@ namespace SalesAPI
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddDbContext<SalesAPIContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("SalesAPIContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
