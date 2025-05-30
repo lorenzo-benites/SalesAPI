@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SalesAPI.Services;
+using SalesAPI.Models;
 
 namespace SalesAPI.Controllers
 {
@@ -20,6 +21,24 @@ namespace SalesAPI.Controllers
         {
             var list = _sellerService.FindAll();
             return View(list);
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Seller seller)
+        {
+            if(seller.Name == null || seller.BirthDate == null || seller.BaseSalary == null || seller.Email == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            _sellerService.Insert(seller);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
