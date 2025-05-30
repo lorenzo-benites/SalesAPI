@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SalesAPI.Data;
 using SalesAPI.Models;
+using SalesAPI.Services;
 
 namespace SalesAPI.Controllers
 {
