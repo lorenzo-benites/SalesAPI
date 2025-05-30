@@ -21,10 +21,24 @@ namespace SalesAPI.Services
             return _context.Seller.ToList();
         }
 
-        public void Insert(Seller obj)
+        public void Insert(Seller s)
         {
-            _context.Add(obj);
+            _context.Add(s);
             _context.SaveChanges();
         }
+
+        public Seller FindById(int id)
+        {
+            return _context.Seller.FirstOrDefault(s => s.Id == id);
+        }
+
+        public void Delete(int id)
+        {
+            var obj = _context.Seller.Find(id);
+            _context.Seller.Remove(obj);
+            _context.SaveChanges();
+        }
+
+          
     }
 }
