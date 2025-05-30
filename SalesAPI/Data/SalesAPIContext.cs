@@ -15,5 +15,7 @@ namespace SalesAPI.Data
         }
 
         public DbSet<SalesAPI.Models.Department> Department { get; set; }
+        public DbSet<SalesAPI.Models.Seller> Seller { get; set; }
+        public DbSet<SalesAPI.Models.SalesRecord> SalesRecord { get; set; }
     }
 }
