@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SalesAPI.Data;
 using SalesAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace SalesAPI.Services
 {
@@ -29,7 +30,7 @@ namespace SalesAPI.Services
 
         public Seller FindById(int id)
         {
-            return _context.Seller.FirstOrDefault(s => s.Id == id);
+            return _context.Seller.Include(obj => obj.Department).FirstOrDefault(s => s.Id == id);
         }
 
         public void Delete(int id)
@@ -37,8 +38,6 @@ namespace SalesAPI.Services
             var obj = _context.Seller.Find(id);
             _context.Seller.Remove(obj);
             _context.SaveChanges();
-        }
-
-          
+        } 
     }
 }
