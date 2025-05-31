@@ -7,6 +7,7 @@ using SalesAPI.Services;
 using SalesAPI.Models;
 using SalesAPI.Models.ViewModels;
 using SalesAPI.Services.Exceptions;
+using System.Diagnostics;
 
 namespace SalesAPI.Controllers
 {
@@ -51,14 +52,14 @@ namespace SalesAPI.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { Message = "ID not found"});
             }
 
             var obj = _sellerService.FindById(id.Value);
 
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { Message = "ID not found" });
             }
 
             return View(obj);
@@ -77,14 +78,14 @@ namespace SalesAPI.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { Message = "ID not found" });
             }
 
             var obj = _sellerService.FindById(id.Value);
 
             if(obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { Message = "ID not found" });
             }
 
             return View(obj);
@@ -94,17 +95,17 @@ namespace SalesAPI.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { Message = "ID not found" });
             }
 
             var obj = _sellerService.FindById(id.Value);
 
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { Message = "ID not found" });
             }
 
-            List<Department> departments = _departmentService.FindAllDepartments();
+        List<Department> departments = _departmentService.FindAllDepartments();
             SellerFormViewModel viewModel = new SellerFormViewModel { Seller = obj, Departments = departments };
 
             return View(viewModel);
@@ -116,7 +117,7 @@ namespace SalesAPI.Controllers
         {
             if (id != seller.Id)
             {
-                return BadRequest();
+                return RedirectToAction(nameof(Error), new { Message = "ID does not match" });
             }
 
             try 
@@ -124,14 +125,25 @@ namespace SalesAPI.Controllers
                 _sellerService.Update(seller);
                 return RedirectToAction(nameof(Index));
             }
-            catch (NotFoundException)
+            catch (NotFoundException e)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { Message = e.Message });
             }
-            catch (DbConcurrencyException)
+            catch (DbConcurrencyException e)
             {
-                return BadRequest();
+                return RedirectToAction(nameof(Error), new { Message = e.Message });
             }
+        }
+
+        public IActionResult Error(string message)
+        {
+            var viewModel = new ErrorViewModel
+            {
+                Message = message,
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            };
+
+            return View(viewModel);
         }
     }
 }
