@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SalesAPI.Data;
 using SalesAPI.Services;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace SalesAPI
 {
@@ -48,6 +50,17 @@ namespace SalesAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, SeedingService seedingService)
         {
+            var usa = new CultureInfo("en-US");
+            var localizationOptions = new RequestLocalizationOptions
+
+            {
+                DefaultRequestCulture = new RequestCulture(usa),
+                SupportedCultures = new List<CultureInfo> { usa },
+                SupportedUICultures = new List<CultureInfo> { usa }
+            };
+
+            app.UseRequestLocalization(localizationOptions);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
