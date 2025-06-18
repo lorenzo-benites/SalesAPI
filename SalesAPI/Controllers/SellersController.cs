@@ -105,7 +105,7 @@ namespace SalesAPI.Controllers
                 return RedirectToAction(nameof(Error), new { Message = "ID not found" });
             }
 
-        List<Department> departments = _departmentService.FindAllDepartments();
+            List<Department> departments = _departmentService.FindAllDepartments();
             SellerFormViewModel viewModel = new SellerFormViewModel { Seller = obj, Departments = departments };
 
             return View(viewModel);
@@ -122,6 +122,11 @@ namespace SalesAPI.Controllers
 
             try 
             {
+                if (seller.Name == null || seller.BirthDate == null || seller.BaseSalary == null || seller.Email == null)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
                 _sellerService.Update(seller);
                 return RedirectToAction(nameof(Index));
             }

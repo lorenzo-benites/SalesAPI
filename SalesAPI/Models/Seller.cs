@@ -9,16 +9,22 @@ namespace SalesAPI.Models
     public class Seller
     {
         public int Id { get; set; }
+
+        [Required(ErrorMessage = "Name required")]
         public string Name { get; set; }
 
+        [Required(ErrorMessage = "Email required")]
+        [EmailAddress(ErrorMessage = "Enter a valid email")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
+        [Required(ErrorMessage = "Birth Date required")]
         [Display(Name= "Birth Date")]
         [DisplayFormat(DataFormatString ="{0:dd/MM/yyyy}")]
         [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
 
+        [Required(ErrorMessage = "Base Salary required")]
         [Display(Name = "Base Salary")]
         [DisplayFormat(DataFormatString = "{0:F2}")]
         public double BaseSalary { get; set; }
