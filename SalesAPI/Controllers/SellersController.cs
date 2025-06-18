@@ -22,40 +22,40 @@ namespace SalesAPI.Controllers
             _departmentService = departmentService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var list = _sellerService.FindAll();
+            var list = await _sellerService.FindAllAsync();
             return View(list);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var departments = _departmentService.FindAllDepartments();
+            var departments = await _departmentService.FindAllDepartmentsAsync();
             var viewModel = new SellerFormViewModel { Departments = departments };
             return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Seller seller)
+        public async Task<IActionResult> Create(Seller seller)
         {
             if(seller.Name == null || seller.BirthDate == null || seller.BaseSalary == null || seller.Email == null)
             {
                 return RedirectToAction(nameof(Index));
             }
 
-            _sellerService.Insert(seller);
+            await _sellerService.InsertAsync(seller);
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return RedirectToAction(nameof(Error), new { Message = "ID not found"});
             }
 
-            var obj = _sellerService.FindById(id.Value);
+            var obj = await _sellerService.FindByIdAsync(id.Value);
 
             if (obj == null)
             {
@@ -68,20 +68,20 @@ namespace SalesAPI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            _sellerService.Delete(id);
+            await _sellerService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return RedirectToAction(nameof(Error), new { Message = "ID not found" });
             }
 
-            var obj = _sellerService.FindById(id.Value);
+            var obj = await _sellerService.FindByIdAsync(id.Value);
 
             if(obj == null)
             {
@@ -91,21 +91,21 @@ namespace SalesAPI.Controllers
             return View(obj);
         }
 
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return RedirectToAction(nameof(Error), new { Message = "ID not found" });
             }
 
-            var obj = _sellerService.FindById(id.Value);
+            var obj = await _sellerService.FindByIdAsync(id.Value);
 
             if (obj == null)
             {
                 return RedirectToAction(nameof(Error), new { Message = "ID not found" });
             }
 
-            List<Department> departments = _departmentService.FindAllDepartments();
+            List<Department> departments = await _departmentService.FindAllDepartmentsAsync();
             SellerFormViewModel viewModel = new SellerFormViewModel { Seller = obj, Departments = departments };
 
             return View(viewModel);
@@ -113,7 +113,7 @@ namespace SalesAPI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Seller seller)
+        public async Task<IActionResult> Edit(int id, Seller seller)
         {
             if (id != seller.Id)
             {
@@ -127,7 +127,7 @@ namespace SalesAPI.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
-                _sellerService.Update(seller);
+                await _sellerService.UpdateAsync(seller);
                 return RedirectToAction(nameof(Index));
             }
             catch (NotFoundException e)

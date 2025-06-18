@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace SalesAPI.Services
@@ -17,9 +18,9 @@ namespace SalesAPI.Services
             _context = context;
         }
 
-        public List<Department> FindAllDepartments()
+        public async Task<List<Department>> FindAllDepartmentsAsync()
         {
-            return _context.Department.OrderBy(x => x.Name).ToList();
+            return await _context.Department.OrderBy(x => x.Name).ToListAsync();
         }
     }
 }
